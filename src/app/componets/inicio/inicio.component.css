@@ -1,0 +1,37 @@
+
+
+.fondoInicio {
+  padding: 20px;
+  background-color: #00287B;
+  width: 75%;
+  margin: auto;
+}
+
+
+.slider {
+  margin-bottom: 20px;
+}
+
+.contenido {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.contenido div {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  min-width: 250px;
+}
+
+.contenido h2 {
+  color: #007BFF;
+  margin-bottom: 10px;
+}
+
+.contenido p {
+  margin: 0;
+}

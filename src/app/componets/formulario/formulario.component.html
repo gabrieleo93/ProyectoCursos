@@ -1,0 +1,64 @@
+
+  <div class="fondoInicio"  >
+
+    <div class="container">
+    <h1>Registra curso de formación</h1>
+    <form [formGroup]="formulariocurso" (ngSubmit)="onSubmit()">
+      <fieldset>
+        <legend>Datos del curso</legend>
+        <ul>
+          <li>
+            <label>Nombre del curso:</label>
+            <input type="text" formControlName="nombre" placeholder="Nombre">
+          </li>
+          <li>
+            <label>Proveedor:</label>
+            <input type="text" formControlName="proveedor" placeholder="Proveedor">
+          </li>
+          <li>
+            <label>Link:</label>
+            <input type="text" formControlName="url" placeholder="url">
+          </li>
+          <li>
+            <label>Inicio:</label>
+            <input type="date" formControlName="inicio">
+            <label>Fin:</label>
+            <input type="date" formControlName="fin">
+          </li>
+          <li>
+            <label for="tipo">Tipo:</label>
+            <select id="tipo" formControlName="tipo">
+              <option value="">Seleccionar Tipo</option>
+              <option value="frontend">Frontend</option>
+              <option value="backend">Backend</option>
+              <option value="basededatos">Base de Datos</option>
+              <option value="analista">Analista</option>
+              <option value="fullstack">Fullstack</option>
+            </select>
+          </li>
+          <li>
+            <label for="calificacion">Clasificación:</label>
+            <select id="calificacion" formControlName="calificacion">
+              <option value="">Seleccionar puntaje</option>
+              <option value="1">1 Estrella</option>
+              <option value="2">2 Estrellas</option>
+              <option value="3">3 Estrellas</option>
+              <option value="4">4 Estrellas</option>
+              <option value="5">5 Estrellas</option>
+            </select>
+          </li>
+          <li>
+            <label>Título:</label>
+            <input type="file" (change)="onFileChange($event)" formControlName="titulo">
+          </li>
+          <li>
+            <input type="submit" value="Registrar">
+            <input type="button" value="Cancelar" (click)="cancel()">
+          </li>
+        </ul>
+      </fieldset>
+    </form>
+  </div>
+
+
+

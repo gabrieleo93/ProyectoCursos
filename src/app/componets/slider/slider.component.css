@@ -1,0 +1,42 @@
+
+.slider-container {
+    max-width: 100%; /* Ancho máximo del slider */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 30px;
+
+}
+
+.slider {
+
+    position: relative;
+    max-width: 600px; /* Ancho máximo del slider */
+    margin: 0 auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.slider img {
+    width: 100%; /* Hacer que las imágenes ocupen el ancho completo del slider */
+    height: 300px;
+    display: block;
+}
+
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente negro */
+    color: white;
+    font-size: 20px;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.prev {
+    left: 0;
+}
+
+.next {
+    right: 0;
+}

@@ -1,0 +1,32 @@
+
+    <div class="top-bar" id="topBar">
+        <div class="welcome-message">
+            @if(mostrarBoton){
+              <p>Bienvenido, Usuario</p>
+            }
+
+        </div>
+        <div class="logo">
+            <img src="../../../assets/Sapiens_International_Corporation_Logo.jpg" alt="Logo de la empresa">
+        </div>
+        <div class="logout-button">
+          <a href="" >Cerrar Sesion</a>
+        </div>
+    </div>
+    <div class="top-menu">
+
+
+      <a href="/home/inicio">Inicio</a>
+      <a href="/home/formulario">Registrar Curso</a>
+      @if(mostrarBoton){
+        <a href="/home/formularioAdmin" >agregar curso</a>
+        <a href="/home/export" >Exportar curso</a>
+
+      }
+      <a href="/home/listado">Listar Cursos</a>
+
+    </div>
+
+
+
+<router-outlet/>

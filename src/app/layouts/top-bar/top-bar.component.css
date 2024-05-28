@@ -1,0 +1,40 @@
+body {
+  background-color:#E8E8E8;
+  margin: 0;
+}
+
+.top {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  left: 0;
+  top: 0;
+  position: fixed;
+  background-color: #00287B;
+  color: white;
+  margin-bottom: 30px;
+  align-content: center;
+}
+
+.tituloApp {
+  font-size: 3vw;
+  padding-left: 20px;
+  font-weight: bold;
+}
+
+
+img {
+  position: static;
+  width: 100%;
+  height: 79px;
+}
+
+.logo{
+  padding: 0;
+  width: 500px;
+  height: 80px;
+
+}

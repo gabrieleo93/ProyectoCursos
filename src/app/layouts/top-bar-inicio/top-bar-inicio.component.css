@@ -1,0 +1,60 @@
+
+.top-bar {
+
+    height: 80px;
+    background-color: rgba(16, 69, 214); /* Color de fondo azul */
+    color: white;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    left: 0;
+    top: 0;
+
+    z-index: 1000;
+}
+
+
+.top-bar .logo img {
+    height: 30px;
+}
+
+.logout-button button {
+    background-color: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.content {
+    margin-top: 70px; /* Ajustar según la altura de la barra superior */
+}
+
+.welcome-message{
+  font-size: 3vw;
+  padding-left: 20px;
+  font-weight: bold;
+  color: whitesmoke;
+}
+.top-menu {
+  background-color: rgba(16, 69, 214);
+  padding: 10px 0;
+  text-align: center;
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+
+}
+
+.top-menu a {
+  color: #fff;
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: bold;
+
+}
+
+.top-menu a:hover {
+  text-decoration: underline;
+}
