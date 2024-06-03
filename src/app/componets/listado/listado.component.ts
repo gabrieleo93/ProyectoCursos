@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core'; // Importa los decoradores Co
 import { CursosService} from '../../services/cursos.service'; // Importa el servicio CursosService y la interfaz Curso
 import { Cursos } from '../../interfaces/cursos';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
+
 import { CommonModule } from '@angular/common';
 
-import { AuthService } from '../../services/auth.service';
+
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-listado', // Selector del componente
@@ -32,15 +33,21 @@ export class ListadoComponent  implements OnInit {
   totalPages: number = 1;
 
   constructor(private cursosService: CursosService,
-   private authService: AuthService
+   private route: Router
   ) {
 
   }
 
   ngOnInit(): void {
-    this.items = this.cursosService.listar();
-    this.filteredItems = [...this.items];
-    this.applyFilters();
+    this.cursosService.listar().subscribe({
+      next: (cursos) => {
+        this.items = cursos;
+        this.filteredItems = [...this.items];
+        this.applyFilters();
+      },
+      error: (err) => console.error('Error al listar los cursos', err)
+    });
+
   }
 
   getStatus(curso: Cursos): string {
@@ -78,12 +85,29 @@ export class ListadoComponent  implements OnInit {
     }
   }
 
-  editItem(item: Cursos): void {
-    console.log('Editar elemento:', item);
+  editItem(id: string): void {
+    // Obtén el curso correspondiente al ID
+    const curso = this.cursosService.obtenerCursoPorId(id)
+
+    // Verifica si se encontró el curso
+    if (curso) {
+      // Imprime el curso por consola
+      console.log('Curso correspondiente al ID', id, ':', curso);
+    } else {
+      console.log('No se encontró ningún curso con el ID:', id);
+    }
+
+    // Navega a la ruta del formulario
+    this.route.navigate(['/home/formulario', id]);
   }
 
-  deleteItem(item: Cursos): void {
-    this.items = this.items.filter(i => i !== item);
-    this.applyFilters(); // Vuelve a aplicar los filtros después de eliminar un elemento
+
+  deleteItem(id: string): void {
+    this.cursosService.eliminarCurso(id).subscribe(success => {
+      if (success) {
+        this.items = this.items.filter(curso => curso.id !== id);
+        this.applyFilters(); // Actualizar después de eliminar
+      }
+    });
   }
 }

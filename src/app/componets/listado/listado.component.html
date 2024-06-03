@@ -33,8 +33,8 @@
           <td>{{ item.calificacion }}</td>
           <td>{{ item.titulo }}</td>
           <td>
-            <button (click)="editItem(item)">Editar</button>
-            <button (click)="deleteItem(item)">Eliminar</button>
+            <button (click)="editItem(item.id)">Editar</button>
+            <button (click)="deleteItem(item.id)">Eliminar</button>
           </td>
         </tr>
       </tbody>

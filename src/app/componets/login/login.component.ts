@@ -2,12 +2,13 @@ import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { UserService } from '../../services/user.service';
-import { AuthService } from '../../services/auth.service';
+import { HttpClientModule } from '@angular/common/http';
+
 
 @Component({
   selector: 'login',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, RouterOutlet, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, RouterOutlet, RouterLink, HttpClientModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -20,7 +21,6 @@ constructor(
   private router: Router,
   private formBuldier: FormBuilder,
   private servicio: UserService,
-  private auth: AuthService
 
 
 ){}
@@ -51,7 +51,7 @@ ngOnInit(): void {
     mail:["",[Validators.required, Validators.email]],
     password: ["",[Validators.required, Validators.minLength(3), Validators.maxLength(12)]],
     confirmPassword: ["",[Validators.required, Validators.minLength(3), Validators.maxLength(12)]],
-    tipo:["",[Validators.required]]
+
 
   })
 }
@@ -79,10 +79,10 @@ registro(){
   const mail=this.formularioRegistro.get("mail")?.value
   const password=this.formularioRegistro.get("password")?.value
   const confirmPassword=this.formularioRegistro.get("confirmPassword")?.value
-  const tipo=this.formularioRegistro.get("tipo")?.value
 
 
-  const registroConExito = this.servicio.registrer(nombreUsuario,apellido, mail, password, confirmPassword,  tipo )
+
+  const registroConExito = this.servicio.register(nombreUsuario,apellido, mail, password, confirmPassword,  )
 
   if(!registroConExito){
       alert("Las contraseñas no coinciden")
@@ -91,7 +91,7 @@ registro(){
       this.formularioLogin.get("apellido")?.setValue(apellido)
       this.formularioLogin.get("mail")?.setValue(mail)
       this.formularioLogin.get("password")?.setValue(password)
-      this.formularioLogin.get("tipo")?.setValue(tipo)
+
 
 
 
@@ -103,7 +103,7 @@ registro(){
     this.formularioRegistro.get("mail")?.setValue("");
     this.formularioRegistro.get("password")?.setValue("");
     this.formularioRegistro.get("confirmPassword")?.setValue("");
-    this.formularioRegistro.get("tipo")?.setValue("");
+
 
 }
 

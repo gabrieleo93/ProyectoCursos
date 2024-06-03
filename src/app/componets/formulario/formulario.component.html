@@ -1,8 +1,6 @@
-
-  <div class="fondoInicio"  >
-
-    <div class="container">
-    <h1>Registra curso de formación</h1>
+<div class="fondoInicio">
+  <div class="container">
+    <h1>{{ isEditMode ? 'Editar curso de formación' : 'Registra curso de formación' }}</h1>
     <form [formGroup]="formulariocurso" (ngSubmit)="onSubmit()">
       <fieldset>
         <legend>Datos del curso</legend>
@@ -37,7 +35,7 @@
             </select>
           </li>
           <li>
-            <label for="calificacion">Clasificación:</label>
+            <label for="calificacion">Calificación:</label>
             <select id="calificacion" formControlName="calificacion">
               <option value="">Seleccionar puntaje</option>
               <option value="1">1 Estrella</option>
@@ -52,13 +50,11 @@
             <input type="file" (change)="onFileChange($event)" formControlName="titulo">
           </li>
           <li>
-            <input type="submit" value="Registrar">
+            <input type="submit" [value]="isEditMode ? 'Actualizar' : 'Registrar'">
             <input type="button" value="Cancelar" (click)="cancel()">
           </li>
         </ul>
       </fieldset>
     </form>
   </div>
-
-
-
+</div>

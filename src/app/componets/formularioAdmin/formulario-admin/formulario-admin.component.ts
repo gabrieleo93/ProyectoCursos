@@ -53,7 +53,7 @@ export class FormularioAdminComponent implements OnInit{
       const userId = this.authService.getLoggedInUserId(); // Obtener el ID del usuario logueado
       console.log(userId)
       if (userId) {
-        this.cursosService.registrarCurso(nombre, proveedor, url, new Date(inicio), new Date(fin), tipo, Number(calificacion), titulo, this.file, userId);
+        this.cursosService.registrarCurso(nombre, proveedor, url, new Date(inicio), new Date(fin), tipo, Number(calificacion), titulo, userId);
         this.formulariocurso2.reset();
         this.file = null;
       } else {

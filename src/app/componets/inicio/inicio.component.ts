@@ -18,7 +18,7 @@ export class InicioComponent implements OnInit {
 
   rol: string=""
 
-  mostrarBoton=false
+  mostrarBoton='ADMIN'
 
   constructor(
     private servicio: UserService,

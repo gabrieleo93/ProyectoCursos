@@ -1,11 +1,10 @@
 export interface User {
   id: string
-  nombre: string
-  apellido: string
-  mail:string
+  nombreEmpleado: string
+  apellidosEmpleado: string
+  mailEmpleado:string
   password: string
-  tipo: string
-  rol:boolean
+  rol: string
 
 }
 

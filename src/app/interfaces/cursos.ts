@@ -1,4 +1,5 @@
 export interface Cursos {
+  id: string;
   nombre: string
   proveedor:string
   url:string
@@ -6,7 +7,7 @@ export interface Cursos {
   fin?:Date
   tipo:string
   calificacion?: number
-  titulo?:string
-  UserId?: string
+  titulo?:File | null
+  UserId: string
 
 }

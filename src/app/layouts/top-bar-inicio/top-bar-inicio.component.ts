@@ -1,49 +1,49 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { InicioComponent } from '../../componets/inicio/inicio.component';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
+import { InicioComponent } from '../../componets/inicio/inicio.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-top-bar-inicio',
   standalone: true,
   imports: [RouterOutlet, InicioComponent],
   templateUrl: './top-bar-inicio.component.html',
-  styleUrl: './top-bar-inicio.component.css'
+  styleUrls: ['./top-bar-inicio.component.css']
 })
-export class TopBarInicioComponent implements OnInit{
-  mostrarBoton=false
+export class TopBarInicioComponent implements OnInit {
+  mostrarBoton: string = 'ADMIN';
+  nombreUsuario: string = '';
+  private subscriptions: Subscription = new Subscription();
+
   constructor(
     private servicio: UserService,
-
-    private router: Router,
-  ){}
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
+    this.usuarioLogeado();
 
-    // if(!this.servicio.estaLogueado){
-    //   this.router.navigate(["/home/inicio"])
-    // }
-    this.usuarioLogeado()
-
-    this.servicio.esAdminObser.subscribe(
-      nuevoValor=>{
-        this.mostrarBoton=nuevoValor
-      }
-    )
-
+    this.subscriptions.add(
+      this.servicio.esAdminObser.subscribe(isAdmin => {
+        this.mostrarBoton = isAdmin;
+      })
+    );
   }
+
   onLogout(): void {
     this.servicio.logout();
+    this.router.navigate(['/']); // Redirect to login or home page
   }
 
-
-
-
-  usuarioLogeado(){
-    let saludo = this.servicio.coonsultaUSer()
-
-    return saludo;
+  usuarioLogeado(): void {
+    const currentUser = this.authService.getCurrentUser();
+    this.nombreUsuario = currentUser ? currentUser.nombre : '';
+    this.servicio.setCurrentUser(currentUser);
   }
-
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
 }

@@ -36,9 +36,15 @@ export class ExportarListadoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.items = this.cursosService.listar();
-    this.filteredItems = [...this.items];
-    this.applyFilters();
+    this.cursosService.listar().subscribe({
+      next: (cursos) => {
+        this.items = cursos;
+        this.filteredItems = [...this.items];
+        this.applyFilters();
+      },
+      error: (err) => console.error('Error al listar los cursos', err)
+    });
+
   }
 
   getStatus(curso: Cursos): string {
