@@ -1,40 +1,52 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Cursos } from '../../interfaces/cursos';
+import { UserService } from '../../services/user.service';
+import { CursosService } from '../../services/cursos.service';
+import { CursosComponent } from '../cursos/cursos.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-slider',
   standalone: true,
-  imports: [],
+  imports: [CursosComponent, CommonModule],
   templateUrl: './slider.component.html',
   styleUrl: './slider.component.css'
 })
 export class SliderComponent implements OnInit {
-  slideIndex: number = 1;
+  @Input() cursos: Cursos[] = [];
+  slideIndex: number = 0;
+  currentCourses: Cursos[] = [];
 
-  constructor() { }
+  constructor(
+    private cursosServices: CursosService) { }
 
   ngOnInit(): void {
     this.showSlides(this.slideIndex);
+
+    this.cursosServices.listar()
+    .subscribe(curso => {
+      this.cursos = curso;
+      this.showSlides(this.slideIndex);
+    });
   }
 
   plusSlides(n: number): void {
-    this.showSlides(this.slideIndex += n);
-  }
-
-  currentSlide(n: number): void {
-    this.showSlides(this.slideIndex = n);
-  }
-
-  showSlides(n: number): void {
-    let i: number;
-    const slides: HTMLCollectionOf<HTMLImageElement> = document.getElementsByClassName("slider")[0].getElementsByTagName("img") as HTMLCollectionOf<HTMLImageElement>;
-
-    if (n > slides.length) { this.slideIndex = 1; }    
-    if (n < 1) { this.slideIndex = slides.length; }
-    
-    for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";  
+    this.slideIndex += n;
+    if (this.slideIndex >= this.cursos.length) {
+      this.slideIndex = 0;
     }
-    
-    slides[this.slideIndex - 1].style.display = "block";  
+    if (this.slideIndex < 0) {
+      this.slideIndex = this.cursos.length - 1;
+    }
+    this.showSlides(this.slideIndex);
+  }
+
+  showSlides(index: number): void {
+    if (this.cursos.length > 0) {
+      this.currentCourses = this.cursos.slice(index, index + 2);
+      if (this.currentCourses.length < 2) {
+        this.currentCourses = this.currentCourses.concat(this.cursos.slice(0, 2 - this.currentCourses.length));
+      }
+    }
   }
 }

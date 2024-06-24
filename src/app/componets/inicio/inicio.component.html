@@ -2,18 +2,17 @@
   <div class="fondoInicio"  >
 
     <div class="slider">
-      <app-slider></app-slider>
+      <app-slider [cursos]="cursos"> </app-slider>
     </div>
-    <div class="contenido">
-        <div>
-          <h2>Titulo de Interés 1</h2>
-          <p>Información de interés 1...</p>
-        </div>
-        <div>
-          <h2>Titulo de Interés 2</h2>
-          <p>Información de interés 2...</p>
-        </div>
+
+    <div class="lista_cursos grid bm-8 pt-4">
+      @for (curso of cursos; track $index) {
+      <div class="col-12 sm:col-4 md:col-3 xl: col-2">
+        <app-cursos [curso]="curso" />
+      </div>}
+
     </div>
+
 
   </div>
 

@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CursosService } from '../../services/cursos.service';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
-
-import { AuthService } from '../../services/auth.service';
+import { Cursos } from '../../interfaces/cursos';
 
 @Component({
   selector: 'app-formulario',
@@ -13,18 +12,17 @@ import { AuthService } from '../../services/auth.service';
   imports: [FormsModule, ReactiveFormsModule, RouterOutlet, RouterLink],
 })
 export class FormularioComponent implements OnInit {
+  curso: Cursos | null = null;
   formulariocurso: FormGroup;
   file: File | null = null;
-  cursoId: string | null = null;
-  isEditMode: boolean = false; // Añadir la propiedad isEditMode
+  cursoId: number | null = null;
+  isEditMode: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private cursosService: CursosService,
-    private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router
-
   ) {
     this.formulariocurso = this.fb.group({
       nombre: ['', Validators.required],
@@ -37,90 +35,69 @@ export class FormularioComponent implements OnInit {
       titulo: ['']
     });
   }
+
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
-        this.cursoId = id;
-        this.cargarCurso(this.cursoId);
-      }
-    });
-  }
-
-  cargarCurso(id: string): void {
-    this.cursosService.obtenerCursoPorId(id).subscribe(curso => {
-      if (curso) {
-        this.formulariocurso.patchValue({
-          nombre: curso.nombre,
-          proveedor: curso.proveedor,
-          url: curso.url,
-          inicio: curso.inicio.toISOString().split('T')[0], // Convertir a string para el input de fecha
-          fin: curso.fin.toISOString().split('T')[0],       // Convertir a string para el input de fecha
-          tipo: curso.tipo,
-          calificacion: curso.calificacion,
-          titulo: curso.titulo
-        });
         this.isEditMode = true;
+        this.cursoId = +id;
+        const navigation = this.router.getCurrentNavigation();
+        if (navigation?.extras.state && navigation.extras.state['curso']) {
+          this.curso = navigation.extras.state['curso'] as Cursos;
+          this.fillForm(this.curso);
+        } else {
+          this.cursosService.obtenerCursoPorId(this.cursoId).subscribe(curso => {
+            if (curso) {
+              this.fillForm(curso);
+            } else {
+              console.error('El curso no se encontró');
+              // Manejar el caso cuando el curso no se encuentra
+            }
+          });
+        }
       }
     });
   }
 
-  onFileChange(event: any): void {
-    const file = event.target.files[0];
-    this.file = file;
+  fillForm(curso: Cursos): void {
     this.formulariocurso.patchValue({
-      titulo: file ? file.name : ''
+      nombre: curso.nombreCurso,
+      proveedor: curso.proveedor,
+      url: curso.urlCurso,
+      inicio: '',
+      fin: '',
+      tipo: curso.tipoCurso,
+      calificacion: curso.clasificacionFinal,
+      titulo: null
     });
+  }
+  isFieldDisabled(field: string): boolean {
+    const value = this.formulariocurso.get(field)?.value;
+    return !!value;
   }
 
   onSubmit(): void {
     if (this.formulariocurso.valid) {
-      const { nombre, proveedor, url, inicio, fin, tipo, calificacion, titulo } = this.formulariocurso.value;
-      const userId = this.authService.getLoggedInUserId();
-
-      if (userId) {
-        if (this.isEditMode && this.cursoId) {
-          this.cursosService.actualizarCurso(
-            this.cursoId,
-            nombre,
-            proveedor,
-            url,
-            new Date(inicio),
-            new Date(fin),
-            tipo,
-            Number(calificacion),
-            this.file,
-            userId
-          ).subscribe(cursoActualizado => {
-            console.log('Curso actualizado:', cursoActualizado);
-            this.router.navigate(['/home/listado']);
-          });
-        } else {
-          this.cursosService.registrarCurso(
-            nombre,
-            proveedor,
-            url,
-            new Date(inicio),
-            new Date(fin),
-            tipo,
-            Number(calificacion),
-            this.file,
-            userId
-          ).subscribe(nuevoCurso => {
-            console.log('Curso registrado:', nuevoCurso);
-            this.router.navigate(['/home/listado']);
-          });
-        }
+      const cursoData = this.formulariocurso.value;
+      if (this.isEditMode && this.cursoId) {
+        // Lógica para actualizar curso
       } else {
-        console.error('User not logged in');
+        // Lógica para registrar curso
       }
-    } else {
-      console.error('Formulario no es válido');
     }
   }
+
+  onFileChange(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.formulariocurso.patchValue({
+        titulo: file
+      });
+    }
+  }
+
   cancel(): void {
-    this.formulariocurso.reset();
-    this.file = null;
-    this.router.navigate(['/home/cursos']); // Redirigir a la lista de cursos si se cancela
+    this.router.navigate(['/']);
   }
 }

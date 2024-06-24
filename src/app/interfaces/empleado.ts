@@ -1,8 +1,8 @@
-export interface User {
-  id: string
+export interface Empleado {
+  id?: string
   nombreEmpleado: string
   apellidosEmpleado: string
-  mailEmpleado:string
+  emailEmpleado:string
   password: string
   rol: string
 

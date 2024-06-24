@@ -1,49 +1,42 @@
-
-  <div class="table-container">
-    <!-- Campos de entrada para filtros -->
-    <div class="filters">
-      <input type="text" placeholder="Nombre" [(ngModel)]="filters.nombre">
-      <input type="text" placeholder="Proveedor" [(ngModel)]="filters.proveedor">
-      <input type="text" placeholder="Tipo" [(ngModel)]="filters.tipo">
-      <input type="number" placeholder="Calificación mínima" [(ngModel)]="filters.calificacionMinima">
-      <input type="number" placeholder="Calificación máxima" [(ngModel)]="filters.calificacionMaxima">
-      <button (click)="applyFilters()">Aplicar filtros</button>
-    </div>
-
-    <table>
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Proveedor</th>
-          <th>URL</th>
-          <th>Status</th>
-          <th>Tipo</th>
-          <th>Calificación</th>
-          <th>Título</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of paginatedItems">
-          <td>{{ item.nombre }}</td>
-          <td>{{ item.proveedor }}</td>
-          <td>{{ item.url }}</td>
-          <td>{{ getStatus(item) }}</td>
-          <td>{{ item.tipo }}</td>
-          <td>{{ item.calificacion }}</td>
-          <td>{{ item.titulo }}</td>
-          <td>
-            <button (click)="editItem(item.id)">Editar</button>
-            <button (click)="deleteItem(item.id)">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Controles de paginación -->
-    <div class="pagination">
-      <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
-      <span>Página {{ currentPage }} de {{ totalPages }}</span>
-      <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
-    </div>
+<div class="table-container">
+  <div class="filters">
+    <input type="text" placeholder="Nombre" [(ngModel)]="filters.nombreCurso">
+    <input type="text" placeholder="Proveedor" [(ngModel)]="filters.proveedor">
+    <input type="text" placeholder="Tipo" [(ngModel)]="filters.tipoCurso">
+    <input type="text" placeholder="URL" [(ngModel)]="filters.urlCurso">
+    <input type="number" placeholder="Calificación mínima" [(ngModel)]="filters.calificacionMinima">
+    <input type="number" placeholder="Calificación máxima" [(ngModel)]="filters.calificacionMaxima">
+    <button (click)="applyFilters()">Aplicar filtros</button>
   </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Proveedor</th>
+        <th>URL</th>
+        <th>Tipo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of paginatedItems">
+        <td>{{ item.idCurso }}</td>
+        <td>{{ item.nombreCurso }}</td>
+        <td>{{ item.proveedor }}</td>
+        <td>{{ item.urlCurso }}</td>
+        <td>{{ item.tipoCurso }}</td>
+        <td>
+          <button (click)="editItem(item.idCurso!)">Asociar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+    <span>Página {{ currentPage }} de {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+  </div>
+</div>

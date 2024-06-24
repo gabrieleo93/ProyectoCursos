@@ -1,50 +1,42 @@
-import { Injectable, OnInit } from '@angular/core';
-import { User } from '../interfaces/user';
-import { BehaviorSubject, Observable, map } from 'rxjs';
-import { v4 as uuid } from 'uuid';
+import { Injectable } from '@angular/core';
+import { Empleado } from '../interfaces/empleado';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { environment } from '../interfaces/enviroment';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService implements OnInit {
-  private readonly baseUrl: string= environment.baseUrl
+export class UserService {
+  private readonly baseUrl: string = environment.baseUrl;
 
-  constructor(
-    private router: Router,
-    private http: HttpClient
-  ) {}
+  constructor(private router: Router, private http: HttpClient) {
+    const currentUser = this.getCurrentUser();
+    if (currentUser) {
+      this.setCurrentUser(currentUser);
+    }
+  }
 
   estaLogueado: boolean = false;
   private esAdmin: BehaviorSubject<string> = new BehaviorSubject<string>('USER');
   esAdminObser: Observable<string> = this.esAdmin.asObservable();
 
-  // Información del usuario logueado
-  userData: User = {
-    id: '',
+  userData: Empleado = {
     nombreEmpleado: '',
     apellidosEmpleado: '',
-    mailEmpleado: '',
+    emailEmpleado: '',
     password: '',
     rol: 'USER'
   };
 
-  ngOnInit(): void {
-    const currentUser = this.getCurrentUser();
-    if (currentUser) {
-      this.userData = currentUser;
-      this.estaLogueado = true;
-      this.esAdmin.next(this.userData.rol);
-    }
-  }
+  login(username: string, password: string): Observable<boolean> {
 
-
-
-
-  login(email: string, password: string): Observable<boolean> {
-    return this.http.post<any>(`${this.baseUrl}auth/login`, { email, password }).pipe(
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    return this.http.post<any>(`${this.baseUrl}/auth/login`, { username, password }, { headers }).pipe(
       map(response => {
         if (response) {
           this.userData = response;
@@ -56,80 +48,92 @@ export class UserService implements OnInit {
           this.resetUserData();
           return false;
         }
-      })
+      }),
+      catchError(this.handleError<boolean>('login', false))
     );
   }
 
-  register(nombreEmpleado: string, apellidosEmpleado: string, mailEmpleado: string, password: string, confirmPassword: string): Observable<boolean> {
-    if (password !== confirmPassword) {
-      return new Observable(observer => observer.next(false));
-    }
-
-    const nuevoUsuario: User = {
-      id: uuid(),
+  register(nombreEmpleado: string, apellidosEmpleado: string, emailEmpleado: string, password: string): Observable<boolean> {
+    const nuevoUsuario: Empleado = {
       nombreEmpleado,
       apellidosEmpleado,
-      mailEmpleado,
+      emailEmpleado,
       password,
       rol: 'USER'
     };
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<any>(`${this.baseUrl}auth/register`, nuevoUsuario, { headers });
 
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<any>(`${this.baseUrl}/auth/register`, nuevoUsuario, { headers }).pipe(
+      map(response => {
+        console.log(response);
+        this.router.navigate(['/']);
+        return true;
+      }),
+      catchError(this.handleError<boolean>('register', false))
+    );
   }
 
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error);
+      return of(result as T);
+    };
+  }
 
   isLoggedIn(): boolean {
     return localStorage.getItem('currentUser') !== null;
   }
 
-  getCurrentUser(): User | null {
-    return JSON.parse(localStorage.getItem('currentUser') || '{}');
+  getCurrentUser(): Empleado | null {
+    const userData = localStorage.getItem('currentUser');
+    if (userData) {
+      const parsedData = JSON.parse(userData);
+      return {
+        nombreEmpleado: parsedData.nombreEmpleadoRespuesta || '',
+        apellidosEmpleado: '',
+        emailEmpleado: '',
+        password: '',
+        rol: parsedData.rolRespuesta || 'USER'
+      };
+    }
+    return null;
   }
 
-  setCurrentUser(user: User | null): void {
+
+  setCurrentUser(user: Empleado | null): void {
     this.userData = user || {
-      id: '',
       nombreEmpleado: '',
       apellidosEmpleado: '',
-      mailEmpleado: '',
+      emailEmpleado: '',
       password: '',
       rol: 'USER'
     };
     this.estaLogueado = !!user;
-    this.esAdmin.next(this.userData.rol);
-  }
 
-  // getUserByMail(mail: string): User | null {
-  //   const user = this.usuarios.find(usuario => usuario.mailEmpleado === mail);
-  //   return user || null;
-  // }
+    if (user) {
+      this.esAdmin.next(user.rol);
+    } else {
+      this.esAdmin.next('USER');
+    }
+  }
 
   logout(): void {
     localStorage.removeItem('currentUser');
     this.router.navigate(['/']);
   }
 
-  coonsultaUSer(): string | null {
-    const usuariosString = localStorage.getItem('usuarios');
-    if (usuariosString) {
-      const usuarios: User[] = JSON.parse(usuariosString);
-      const primerNombre = usuarios[0].nombreEmpleado;
-      console.log(primerNombre);
-    }
-    return usuariosString;
-  }
-
   private resetUserData(): void {
     this.userData = {
-      id: '',
       nombreEmpleado: '',
       apellidosEmpleado: '',
-      mailEmpleado: '',
+      emailEmpleado: '',
       password: '',
-      rol:''
+      rol: 'USER'
     };
     this.estaLogueado = false;
-    this.esAdmin.next('');
+    this.esAdmin.next('USER');
   }
 }

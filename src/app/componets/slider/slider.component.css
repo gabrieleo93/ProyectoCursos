@@ -1,42 +1,61 @@
-
 .slider-container {
-    max-width: 100%; /* Ancho máximo del slider */
-    margin-left: auto;
-    margin-right: auto;
-    padding: 30px;
-
+  position: relative;
+  max-width: 80%;
+  margin: auto;
+  overflow: hidden;
+  background: #9eb4d6; /* Fondo azul */
+  color: black; /* Texto en blanco */
+  padding: 20px;
+  border-radius: 10px;
 }
 
 .slider {
-
-    position: relative;
-    max-width: 600px; /* Ancho máximo del slider */
-    margin: 0 auto;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
-.slider img {
-    width: 100%; /* Hacer que las imágenes ocupen el ancho completo del slider */
-    height: 300px;
-    display: block;
+.contenido {
+  display: flex;
+  justify-content: space-around; /* Distribuir espacio equitativamente */
+  width: 100%;
+  gap: 20px; /* Espacio entre los cursos */
+}
+
+.course {
+  flex: 0 0 45%; /* Ancho fijo para las tarjetas */
+  max-width: 45%; /* Asegurar que no se extiendan más allá de este tamaño */
+  box-sizing: border-box;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .prev, .next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente negro */
-    color: white;
-    font-size: 20px;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 1;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  user-select: none;
+  z-index: 10;
 }
 
 .prev {
-    left: 0;
+  left: 0;
+  border-radius: 3px 0 0 3px;
 }
 
 .next {
-    right: 0;
+  right: 0;
+  border-radius: 0 3px 3px 0;
+}
+
+.prev:hover, .next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
 }

@@ -2,7 +2,7 @@
 
   <div class="container">
   <h1>Registra curso de formación</h1>
-  <form [formGroup]="formulariocurso2" (ngSubmit)="onSubmit()">
+  <form [formGroup]="formulariocurso2" (submit)="registro()">
     <fieldset>
       <legend>Datos del curso</legend>
       <ul>
@@ -24,9 +24,9 @@
             <option value="">Seleccionar Tipo</option>
             <option value="frontend">Frontend</option>
             <option value="backend">Backend</option>
-            <option value="basededatos">Base de Datos</option>
-            <option value="analista">Analista</option>
-            <option value="fullstack">Fullstack</option>
+            <option value="BBDD">Base de Datos</option>
+            <option value="analisis">Analista</option>
+
           </select>
         </li>
         <li>

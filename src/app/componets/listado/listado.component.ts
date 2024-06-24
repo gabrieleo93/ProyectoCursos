@@ -1,29 +1,27 @@
-import { Component, OnInit } from '@angular/core'; // Importa los decoradores Component y OnInit
-import { CursosService} from '../../services/cursos.service'; // Importa el servicio CursosService y la interfaz Curso
-import { Cursos } from '../../interfaces/cursos';
+import { Component, OnInit } from '@angular/core';
+import { CursosService } from '../../services/cursos.service';
+import { CursosAsoc } from '../../interfaces/cursosAsoc';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { CommonModule } from '@angular/common';
-
-
 import { Router } from '@angular/router';
+import { Cursos } from '../../interfaces/cursos';
 
 @Component({
-  selector: 'app-listado', // Selector del componente
-  templateUrl: './listado.component.html', // Ruta del archivo de plantilla HTML
-  styleUrls: ['./listado.component.css'],// Ruta del archivo de estilos CSS
+  selector: 'app-listado',
+  templateUrl: './listado.component.html',
+  styleUrls: ['./listado.component.css'],
   standalone: true,
-  imports:[ FormsModule,
-    ReactiveFormsModule,CommonModule]
+  imports: [FormsModule, ReactiveFormsModule, CommonModule]
 })
-export class ListadoComponent  implements OnInit {
+export class ListadoComponent implements OnInit {
   items: Cursos[] = [];
   filteredItems: Cursos[] = [];
   paginatedItems: Cursos[] = [];
   filters: {
-    nombre?: string,
+    nombreCurso?: string,
     proveedor?: string,
-    tipo?: string,
+    urlCurso?: string,
+    tipoCurso?: string,
     calificacionMinima?: number,
     calificacionMaxima?: number
   } = {};
@@ -32,11 +30,7 @@ export class ListadoComponent  implements OnInit {
   itemsPerPage: number = 5;
   totalPages: number = 1;
 
-  constructor(private cursosService: CursosService,
-   private route: Router
-  ) {
-
-  }
+  constructor(private cursosService: CursosService, private route: Router) { }
 
   ngOnInit(): void {
     this.cursosService.listar().subscribe({
@@ -47,22 +41,11 @@ export class ListadoComponent  implements OnInit {
       },
       error: (err) => console.error('Error al listar los cursos', err)
     });
-
-  }
-
-  getStatus(curso: Cursos): string {
-    if (curso.fin) {
-      return 'Completado';
-    } else if (curso.inicio) {
-      return 'Pendiente';
-    } else {
-      return 'Por empezar';
-    }
   }
 
   applyFilters(): void {
     this.filteredItems = this.cursosService.applyFilters(this.filters);
-    this.currentPage = 1; // Reset to first page after filtering
+    this.currentPage = 1;
     this.updatePagination();
   }
 
@@ -85,29 +68,21 @@ export class ListadoComponent  implements OnInit {
     }
   }
 
-  editItem(id: string): void {
-    // Obtén el curso correspondiente al ID
-    const curso = this.cursosService.obtenerCursoPorId(id)
-
-    // Verifica si se encontró el curso
-    if (curso) {
-      // Imprime el curso por consola
-      console.log('Curso correspondiente al ID', id, ':', curso);
-    } else {
-      console.log('No se encontró ningún curso con el ID:', id);
+  editItem(id: number): void {
+    const selectedCurso = this.items.find(item => item.idCurso === id);
+    if (selectedCurso) {
+      // Navega a la ruta del formulario con el ID del curso como parámetro y el estado del curso
+      this.route.navigate(['/home/formulario', id], { state: { curso: selectedCurso } });
     }
-
-    // Navega a la ruta del formulario
-    this.route.navigate(['/home/formulario', id]);
   }
 
-
-  deleteItem(id: string): void {
-    this.cursosService.eliminarCurso(id).subscribe(success => {
-      if (success) {
-        this.items = this.items.filter(curso => curso.id !== id);
-        this.applyFilters(); // Actualizar después de eliminar
-      }
-    });
+  getStatus(curso: CursosAsoc): string {
+    if (curso.fin) {
+      return 'Completado';
+    } else if (curso.inicio) {
+      return 'Pendiente';
+    } else {
+      return 'Por empezar';
+    }
   }
 }

@@ -1,42 +1,35 @@
 <div class="fondoInicio">
   <div class="container">
-    <h1>{{ isEditMode ? 'Editar curso de formación' : 'Registra curso de formación' }}</h1>
+    <h1>{{ isEditMode ? 'Editar curso de formación' : 'Registrar curso de formación' }}</h1>
     <form [formGroup]="formulariocurso" (ngSubmit)="onSubmit()">
       <fieldset>
         <legend>Datos del curso</legend>
         <ul>
           <li>
             <label>Nombre del curso:</label>
-            <input type="text" formControlName="nombre" placeholder="Nombre">
+            <input type="text" formControlName="nombre" placeholder="Nombre" [disabled]="isFieldDisabled('nombre')">
           </li>
           <li>
             <label>Proveedor:</label>
-            <input type="text" formControlName="proveedor" placeholder="Proveedor">
+            <input type="text" formControlName="proveedor" placeholder="Proveedor" [disabled]="isFieldDisabled('proveedor')">
           </li>
           <li>
             <label>Link:</label>
-            <input type="text" formControlName="url" placeholder="url">
+            <input type="text" formControlName="url" placeholder="url" [disabled]="isFieldDisabled('url')">
           </li>
           <li>
             <label>Inicio:</label>
-            <input type="date" formControlName="inicio">
+            <input type="date" formControlName="inicio" [disabled]="isFieldDisabled('inicio')">
             <label>Fin:</label>
-            <input type="date" formControlName="fin">
+            <input type="date" formControlName="fin" [disabled]="isFieldDisabled('fin')">
           </li>
           <li>
             <label for="tipo">Tipo:</label>
-            <select id="tipo" formControlName="tipo">
-              <option value="">Seleccionar Tipo</option>
-              <option value="frontend">Frontend</option>
-              <option value="backend">Backend</option>
-              <option value="basededatos">Base de Datos</option>
-              <option value="analista">Analista</option>
-              <option value="fullstack">Fullstack</option>
-            </select>
+            <input type="text" formControlName="tipo" placeholder="Tipo" [disabled]="isFieldDisabled('tipo')">
           </li>
           <li>
             <label for="calificacion">Calificación:</label>
-            <select id="calificacion" formControlName="calificacion">
+            <select id="calificacion" formControlName="calificacion" [disabled]="isFieldDisabled('calificacion')">
               <option value="">Seleccionar puntaje</option>
               <option value="1">1 Estrella</option>
               <option value="2">2 Estrellas</option>
@@ -47,7 +40,7 @@
           </li>
           <li>
             <label>Título:</label>
-            <input type="file" (change)="onFileChange($event)" formControlName="titulo">
+            <input type="file" (change)="onFileChange($event)" formControlName="titulo" [disabled]="isFieldDisabled('titulo')">
           </li>
           <li>
             <input type="submit" [value]="isEditMode ? 'Actualizar' : 'Registrar'">

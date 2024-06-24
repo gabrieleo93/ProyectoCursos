@@ -1,31 +1,31 @@
 
-    <div class="top-bar" id="topBar">
-        <div class="welcome-message">
+<div class="top-bar" id="topBar">
+  <div class="welcome-message">
 
-              <p>Bienvenido, {{nombreUsuario}}</p> -
-
-
-        </div>
-        <div class="logo">
-            <img src="../../../assets/Sapiens_International_Corporation_Logo.jpg" alt="Logo de la empresa">
-        </div>
-        <div class="logout-button">
-          <button (click)="onLogout()">Cerrar Sesion</button>
-        </div>
-    </div>
-    <div class="top-menu">
+        <p>Bienvenido, {{nombreUsuario}}</p>
 
 
-      <a href="/home/inicio">Inicio</a>
-      <a href="/home/formulario">Registrar Curso</a>
-      @if(mostrarBoton){
-        <a href="/home/formularioAdmin" >agregar curso</a>
-        <a href="/home/export" >Exportar curso</a>
+  </div>
+  <div class="logo">
+      <img src="../../../assets/Sapiens_International_Corporation_Logo.jpg" alt="Logo de la empresa">
+  </div>
+  <div class="logout-button">
+    <button (click)="onLogout()">Cerrar Sesion</button>
+  </div>
+</div>
+<div class="top-menu">
 
-      }
-      <a href="/home/listado">Listar Cursos</a>
 
-    </div>
+<a href="/home/inicio">Inicio</a>
+<a href="/home/formulario">Registrar Curso</a>
+<a href="/home/formularioAdmin" >agregar curso</a>
+@if(mostrarBoton){
+  <a href="/home/export" >Exportar curso</a>
+
+}
+<a href="/home/listado">Listar Cursos</a>
+
+</div>
 
 
 
